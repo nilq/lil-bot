@@ -1,1 +1,0 @@
-/home/niql/workspaces/rust/lil-bot/src/target/debug/lilbot: /home/niql/workspaces/rust/lil-bot/src/liblilbot/src/bot/mod.rs /home/niql/workspaces/rust/lil-bot/src/liblilbot/src/bot/command.rs /home/niql/workspaces/rust/lil-bot/src/lilbot/src/main.rs /home/niql/workspaces/rust/lil-bot/src/liblilbot/src/lib.rs
