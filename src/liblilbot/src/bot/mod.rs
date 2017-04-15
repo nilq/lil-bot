@@ -6,12 +6,12 @@ pub mod command;
 
 use self::command::Command;
 
-pub struct LilBot<'a> {
+pub struct LilBot {
     discord: Discord,
-    commands: Vec<Box<Command<'a>>>,
+    commands: Vec<Box<Command>>,
 }
 
-impl<'a> LilBot<'a> {
+impl LilBot {
     pub fn new(token: &str) -> LilBot {
         LilBot {
             discord:  Discord::from_bot_token(token).expect("invalid discord token!"),
@@ -23,7 +23,15 @@ impl<'a> LilBot<'a> {
         LilBot {
             discord:  Discord::from_bot_token(token).expect("invalid discord token!"),
             commands: vec![
-                Box::new(command::Hello {}),
+                Box::new(command::DisplayContent::new(
+                    vec![command::Trigger::Only("!ping".to_string())], "lil-boat!".to_string())
+                ),
+                Box::new(command::DisplayContent::new(
+                    vec![command::Trigger::Only("!help".to_string())], "yeye hello :thinking:".to_string())
+                ),
+                Box::new(command::DisplayContent::new(
+                    vec![command::Trigger::Args("!pay".to_string())], "printed secret things >:(".to_string())
+                ),
             ],
         }
     }
@@ -39,8 +47,19 @@ impl<'a> LilBot<'a> {
                 Ok(Event::MessageCreate(message)) => {
                     let parts: Vec<&str> = message.content.split(" ").collect();
                     for cmd in &self.commands {
-                        if cmd.trigger() == parts[0] {
-                            cmd.execute(&self, &message, message.content[..parts[0].len()].split(" ").collect());
+                        for trigger in cmd.triggers() {
+                            match trigger {
+                                command::Trigger::Only(c) => if c == parts[0].to_owned() {
+                                    if parts.len() > 1 {
+                                        break
+                                    }
+                                    cmd.execute(&self, &message, vec![]);
+                                },
+
+                                command::Trigger::Args(c) => if c == parts[0].to_owned() {
+                                    cmd.execute(&self, &message, message.content.split(" ").collect());
+                                },
+                            }
                         }
                     }
                 },
