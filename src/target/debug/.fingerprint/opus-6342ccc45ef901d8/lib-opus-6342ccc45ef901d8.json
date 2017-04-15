@@ -1,0 +1,1 @@
+{"rustc":9749998217168482212,"target":15338115403630123583,"profile":14528549471338536373,"local":{"variant":"Precalculated","fields":["0.2.0"]},"features":"None","deps":[["libc v0.2.21",9441299200023339476],["opus-sys v0.2.1",8053802528881283629]],"rustflags":[]}
